@@ -29,7 +29,7 @@
                     ctx.drawImage(img, 0, 0, width, height);
                     var dataUrl = canvas.toDataURL('image/jpeg');
                     img2.src = dataUrl;
-                }, 3000);
+                }, 10000);
 
             }, 100);
 
