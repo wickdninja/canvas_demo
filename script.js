@@ -2,9 +2,12 @@
     'use-strict';
 
     window.onload = function() {
+        var maxSize = 900;
+        
         var img1 = document.getElementById('img1');
         var img2 = document.getElementById('img2');
         var canvas = document.getElementById('canvas');
+        var ctx = canvas.getContext('2d');
         var fileInput = document.querySelector('input[type=file]');
 
         var reader = new FileReader();
@@ -17,7 +20,6 @@
                 img.src = data;
                 console.log('img: ' + img.width + ' x ' + img.height);
 
-                var maxSize = 900;
                 var width = img1.width;
                 var height = img1.height;
 
@@ -35,10 +37,10 @@
                 canvas.width = width;
                 canvas.height = height;
                 window.setTimeout(function() {
-                    canvas.getContext('2d').drawImage(img1, 0, 0, width, height);
+                    ctx.drawImage(img1, 0, 0, width, height);
                     var dataUrl = canvas.toDataURL('image/jpeg');
                     img2.src = dataUrl;
-                }, 10000);
+                }, 1000);
 
             }, 100);
 
