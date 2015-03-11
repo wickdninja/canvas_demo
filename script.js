@@ -10,7 +10,7 @@
 
         var reader = new FileReader();
         reader.onloadend = function() {
-
+            
             var data = reader.result;
             img1.src = data;
             var img = new Image;
@@ -20,7 +20,15 @@
 
 
             function resizeImage() {
-                var newDataUri = imageToDataUri(this, 700, 350);
+                var width, height;
+                if (img.width > img.height) {
+                    width = 700;
+                    height: 350;
+                } else {
+                    width = 350;
+                    height: 700;
+                }
+                var newDataUri = imageToDataUri(this, width, height);
                 img2.src = newDataUri;
             }
 
