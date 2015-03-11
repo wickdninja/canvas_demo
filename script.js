@@ -10,12 +10,32 @@
         var reader = new FileReader();
         reader.onloadend = function() {
             var data = reader.result;
+            console.log(data.length);
             img1.src = data;
+            var img = new Image();
+            img.src = data;
+            console.log('img: ' + img.width + ' x ' + img.height);
 
-            canvas.width = img1.width;
-            canvas.height = img1.height;
-            canvas.getContext('2d').drawImage(img1, 0, 0, img1.width, img1.height);
-            var dataUrl = canvas.toDataURL();
+            var maxSize = 900;
+            var width = img1.width;
+            var height = img1.height;
+
+            if (width > height) {
+                if (width > maxSize) {
+                    height *= maxSize / width;
+                    width = maxSize;
+                }
+            } else {
+                if (height > maxSize) {
+                    width *= maxSize / width;
+                    height = maxSize;
+                }
+            }
+            canvas.width = width;
+            canvas.height = height;
+            canvas.getContext('2d').drawImage(img1, 0, 0, width, height);
+
+            var dataUrl = canvas.toDataURL('image/jpeg');
 
             img2.src = dataUrl;
 
