@@ -38,9 +38,9 @@
                     canvas.getContext('2d').drawImage(img1, 0, 0, width, height);
                     var dataUrl = canvas.toDataURL('image/jpeg');
                     img2.src = dataUrl;
-                }, 5000);
+                }, 10000);
 
-            }, 10000);
+            }, 100);
 
 
         };
