@@ -34,10 +34,9 @@
                         height = maxSize;
                     }
                 }
-                canvas.width = width;
-                canvas.height = height;
+                
                 window.setTimeout(function() {
-                    ctx.drawImage(img1, 0, 0, width, height);
+                    ctx.drawImage(img1, 0, 0, img1.width, img1.height);
                     var dataUrl = canvas.toDataURL('image/jpeg');
                     img2.src = dataUrl;
                 }, 1000);
