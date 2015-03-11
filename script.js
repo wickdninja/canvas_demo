@@ -9,35 +9,38 @@
 
         var reader = new FileReader();
         reader.onloadend = function() {
-            var data = reader.result;
-            console.log(data.length);
-            img1.src = data;
-            var img = new Image();
-            img.src = data;
-            console.log('img: ' + img.width + ' x ' + img.height);
+            window.setTimeout(function() {
+                var data = reader.result;
+                console.log(data.length);
+                img1.src = data;
+                var img = new Image();
+                img.src = data;
+                console.log('img: ' + img.width + ' x ' + img.height);
 
-            var maxSize = 900;
-            var width = img1.width;
-            var height = img1.height;
+                var maxSize = 900;
+                var width = img1.width;
+                var height = img1.height;
 
-            if (width > height) {
-                if (width > maxSize) {
-                    height *= maxSize / width;
-                    width = maxSize;
+                if (width > height) {
+                    if (width > maxSize) {
+                        height *= maxSize / width;
+                        width = maxSize;
+                    }
+                } else {
+                    if (height > maxSize) {
+                        width *= maxSize / width;
+                        height = maxSize;
+                    }
                 }
-            } else {
-                if (height > maxSize) {
-                    width *= maxSize / width;
-                    height = maxSize;
-                }
-            }
-            canvas.width = width;
-            canvas.height = height;
-            canvas.getContext('2d').drawImage(img1, 0, 0, width, height);
+                canvas.width = width;
+                canvas.height = height;
+                canvas.getContext('2d').drawImage(img1, 0, 0, width, height);
 
-            var dataUrl = canvas.toDataURL('image/jpeg');
+                var dataUrl = canvas.toDataURL('image/jpeg');
 
-            img2.src = dataUrl;
+                img2.src = dataUrl;
+            }, 5000);
+
 
         };
 
