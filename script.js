@@ -34,12 +34,13 @@
                 }
                 canvas.width = width;
                 canvas.height = height;
-                canvas.getContext('2d').drawImage(img1, 0, 0, width, height);
+                window.setTimeout(function() {
+                    canvas.getContext('2d').drawImage(img1, 0, 0, width, height);
+                    var dataUrl = canvas.toDataURL('image/jpeg');
+                    img2.src = dataUrl;
+                }, 5000);
 
-                var dataUrl = canvas.toDataURL('image/jpeg');
-
-                img2.src = dataUrl;
-            }, 5000);
+            }, 10000);
 
 
         };
