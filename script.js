@@ -30,8 +30,8 @@
 					width = (img.width / ratio);
 					height = (img.height / ratio);
 				}
-				var newDataUri = imageToDataUri(this, width, height);		+					height = (img.height / ratio);
--                		img2.src = newDataUri;
+				var newDataUri = imageToDataUri(this, width, height);
+				img2.src = newDataUri;
 			};
 			fileInput.onchange = function() {
 				var file = document.querySelector('input[type=file]').files[0];
