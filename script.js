@@ -31,16 +31,15 @@ window.onload = function() {
             }
             var newDataUri = imageToDataUri(this, width, height);
             img2.src = newDataUri;
-        };
-        
-        fileInput.onchange = function() {
-            var file = document.querySelector('input[type=file]').files[0];
-            if (file) {
-                reader.readAsDataURL(file);
-            } else {
-                img1.src = '';
-            }
-        };
+        }
+    };
+    fileInput.onchange = function() {
+        var file = document.querySelector('input[type=file]').files[0];
+        if (file) {
+            reader.readAsDataURL(file);
+        } else {
+            img1.src = '';
+        }
     };
 };
 
