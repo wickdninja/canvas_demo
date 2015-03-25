@@ -6,3 +6,7 @@ main {
     width: 60%;
     margin: 1em 15% 0 5%;
 }
+
+img {
+    max-width: 300px;
+}
