@@ -1,7 +1,7 @@
 //wrap logic in IIFE
 (function() {
     'use-strict';
-    var img1, img2, fileInput, reader, data;
+    var img1, img2, fileInput, reader, data, img, isTall, quality = 0.8;
     //NOTE: Assumes the photo was taken in landscape, or rotates the photo to landscape if not.
     window.onload = function() {
         img1 = document.getElementById('img1');
@@ -30,7 +30,6 @@
     function resizeImage() {
         var width = 0,
             height = 0,
-            quality = 0.8,
             target = 1600,
             ratio = 1,
             newDataUri = null;
@@ -39,17 +38,15 @@
         width = (img.width / ratio);
         height = (img.height / ratio);
 
-        if (/iPad|iPhone|iPod/.test(navigator.platform)) {
+        if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
             if (isTall) {
-                newDataUri = imageToDataUri(this, width, height, quality);
-                newDataUri = rotateBase64Image(newDataUri, quality, width, height);
+                newDataUri = rotateBase64Image(this, quality, width, height);
             } else {
                 newDataUri = imageToDataUri(this, width, height, quality);
             }
         } else {
             newDataUri = imageToDataUri(this, width, height, quality);
         }
-        
         img2.src = newDataUri;
     }
 
@@ -114,27 +111,20 @@
      * Rotates the image 90 degrees on iOS devices.
      * (This should only apply if the photo is in portrait mode)
      */
-    function rotateBase64Image(base64data, quality, width, height) {
-        var img2 = document.getElementById('img2');
+    function rotateBase64Image(image, width, height) {
         var canvas = document.createElement('canvas');
         var ctx = canvas.getContext("2d");
-
         canvas.width = height;
         canvas.height = width;
-
-        var image = new Image();
-        image.src = base64data;
-        image.onload = function() {
-            ctx.translate(height, 0);
-            ctx.rotate(90 * Math.PI / 180);
-            ctx.drawImage(image, 0, 0, width, height);
-            return canvas.toDataURL('image/jpeg', quality || 0.8);
-        };
+        ctx.translate(height, 0);
+        ctx.rotate(90 * Math.PI / 180);
+        ctx.drawImage(image, 0, 0, width, height);
+        return canvas.toDataURL('image/jpeg', quality);
     }
 
     function getOrientation() {
-        var isTall = isPortrait(img1);
-        var img = new Image();
+        isTall = isPortrait(img1);
+        img = new Image();
         img.onload = resizeImage;
         img.src = data;
     }
@@ -146,3 +136,4 @@
     }
 
 }());
+
