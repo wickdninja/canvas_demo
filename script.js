@@ -1,36 +1,14 @@
 //wrap logic in IIFE
 (function() {
     'use-strict';
-
+    var img1, img2, fileInput, reader, data, img, isTall, tmpWidth, tmpHeight;
     //NOTE: Assumes the photo was taken in landscape, or rotates the photo to landscape if not.
     window.onload = function() {
-        var img1 = document.getElementById('img1');
-        var img2 = document.getElementById('img2');
-        var fileInput = document.querySelector('input[type=file]');
-        var reader = new FileReader();
-        reader.onloadend = function() {
-            var data = reader.result;
-            img1.src = data;
-            var img = new Image();
-            img.onload = resizeImage;
-            img.src = data;
-
-            // Resize the image
-            function resizeImage() {
-                var width = 0,
-                    height = 0,
-                    quality = 0.8,
-                    target = 1600,
-                    ratio = 1;
-
-                ratio = (img.width / target);
-                width = (img.width / ratio);
-                height = (img.height / ratio);
-
-                var newDataUri = imageToDataUri(this, width, height, quality);
-                img2.src = newDataUri;
-            }
-        };
+        img1 = document.getElementById('img1');
+        img2 = document.getElementById('img2');
+        fileInput = document.querySelector('input[type=file]');
+        reader = new FileReader();
+        reader.onloadend = imageLoaded
 
         fileInput.onchange = function() {
             var file = document.querySelector('input[type=file]').files[0];
@@ -40,7 +18,39 @@
                 img1.src = '';
             }
         };
+
     };
+
+    function imageLoaded() {
+        data = reader.result;
+        img1.onload = getOrientation
+        img1.src = data;
+    }
+    // Resize the image
+    function resizeImage() {
+        var width = 0,
+            height = 0,
+            quality = 0.8,
+            target = 1600,
+            ratio = 1,
+            newDataUri = null;
+
+        ratio = (img.width / target);
+        width = (img.width / ratio);
+        height = (img.height / ratio);
+
+        if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
+            if (isTall) {
+                newDataUri = imageToDataUri(this, width, height, quality);
+                newDataUri = rotateBase64Image(this, newDataUri, quality, width, height);
+            } else {
+                newDataUri = imageToDataUri(this, width, height, quality);
+            }
+        } else {
+            newDataUri = imageToDataUri(this, width, height, quality);
+        }
+        renderResult(newDataUri);
+    }
 
     function imageToDataUri(img, width, height, quality) {
         // create an off-screen canvas
@@ -98,4 +108,43 @@
             sw * vertSquashRatio, sh * vertSquashRatio,
             dx, dy, dw, dh);
     }
+    function renderResult(data){
+        img2.src = data;
+    }
+    /*
+     * Rotates the image 90 degrees on iOS devices.
+     * (This should only apply if the photo is in portrait mode)
+     */
+    function rotateBase64Image(image, base64data, quality, width, height) {
+        tmpWidth = width;
+        tmpHeight = height;
+        image.onload = rotateImage;
+        image.src = base64data;
+    }
+
+    function rotateImage() {
+        var canvas = document.createElement('canvas');
+        var ctx = canvas.getContext("2d");
+        canvas.width = tmpWidth;
+        canvas.height = tmpHeight;
+        ctx.translate(height, 0);
+        ctx.rotate(90 * Math.PI / 180);
+        ctx.drawImage(image, 0, 0, width, height);
+        var result =  canvas.toDataURL('image/jpeg', quality || 0.8);
+        renderResult(result);
+    }
+
+    function getOrientation() {
+        isTall = isPortrait(img1);
+        img = new Image();
+        img.onload = resizeImage;
+        img.src = data;
+    }
+
+    function isPortrait(img) {
+        var w = img.naturalWidth || img.width,
+            h = img.naturalHeight || img.height;
+        return (h > w);
+    }
+
 }());
