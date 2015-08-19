@@ -40,7 +40,7 @@
 
         if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
             if (isTall) {
-                newDataUri = rotateBase64Image(this, quality, width, height);
+                newDataUri = rotateBase64Image(this, width, height);
             } else {
                 newDataUri = imageToDataUri(this, width, height, quality);
             }
@@ -106,7 +106,6 @@
             sw * vertSquashRatio, sh * vertSquashRatio,
             dx, dy, dw, dh);
     }
-
     /*
      * Rotates the image 90 degrees on iOS devices.
      * (This should only apply if the photo is in portrait mode)
@@ -136,4 +135,5 @@
     }
 
 }());
+
 
