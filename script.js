@@ -37,7 +37,10 @@
         ratio = (img.width / target);
         width = (img.width / ratio);
         height = (img.height / ratio);
-
+        var bin = atob(this.split(',')[1]);
+        var exif = EXIF.readFromBinaryFile(new BinaryFile(bin));
+        console.log(exif);
+        alert(exif.Orientation);
         if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
             if (isTall) {
                 newDataUri = rotateBase64Image(this, width, height);
